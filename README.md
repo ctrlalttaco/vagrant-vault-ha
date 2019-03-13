@@ -52,11 +52,11 @@ vagrant up
 
 `VAULT_VERSION` - Specify the version of Vault to use
 
-## ACL Policies
+## Consul ACL Policies
 
 Follow the [Consul ACL Guide](https://learn.hashicorp.com/consul/advanced/day-1-operations/acl-guide) to bootstrap and configure the agent token.
 
-Example Policy:
+Example Consul Agent Policy:
 
 ```
 node_prefix "consul" {
@@ -65,6 +65,30 @@ node_prefix "consul" {
 
 service_prefix "" {
     policy = "read"
+}
+```
+
+Example Vault Consul Client Policy:
+
+```
+node_prefix "vault" {
+    policy = "write"
+}
+
+service "vault" {
+    policy = "write"
+}
+
+agent_prefix "vault" {
+    policy = "write"
+}
+
+key_prefix "vault/" {
+    policy = "write"
+}
+
+session_prefix "" {
+    policy = "write"
 }
 ```
 
