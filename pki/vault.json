@@ -1,0 +1,18 @@
+{
+    "CN": "vault.example.net",
+    "hosts": [
+        "vault.example.net"
+    ],
+    "key": {
+        "algo": "rsa",
+        "size": 2048
+    },
+    "names": [
+        {
+            "C": "US",
+            "ST": "CA",
+            "L": "San Francisco"
+        }
+    ]
+}
+

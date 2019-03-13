@@ -1,0 +1,18 @@
+{
+    "CN": "server.vagrant.consul",
+    "hosts": [
+        "server.vagrant.consul"
+    ],
+    "key": {
+        "algo": "rsa",
+        "size": 2048
+    },
+    "names": [
+        {
+            "C": "US",
+            "ST": "CA",
+            "L": "San Francisco"
+        }
+    ]
+}
+
