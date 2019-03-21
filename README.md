@@ -8,7 +8,7 @@ Build a three-node Consul and two-node Vault cluster using HashiCorp Vagrant.
 
 ### Consul
 
-Version : `1.4.0`
+Version : `1.4.4`
 
 TLS Enabled : `true`
 
@@ -18,7 +18,7 @@ Operating System : `CentOS 7`
 
 ### Vault
 
-Version : `1.0.3`
+Version : `1.1.0`
 
 TLS Enabled : `true`
 

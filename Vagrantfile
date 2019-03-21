@@ -4,7 +4,7 @@
 ### Define environment variables to pass on to provisioner
 
 # Specify a Consul version
-CONSUL_VERSION = ENV['CONSUL_VERSION'] || "1.4.0"
+CONSUL_VERSION = ENV['CONSUL_VERSION'] || "1.4.4"
 
 # Download Consul Enterprise binary
 CONSUL_ENTERPRISE = ENV['CONSUL_ENTERPRISE'] || "false"
@@ -13,7 +13,7 @@ CONSUL_ENTERPRISE = ENV['CONSUL_ENTERPRISE'] || "false"
 CONSUL_ACL = ENV['CONSUL_ACL'] || "false"
 
 # Specify a Vault version
-VAULT_VERSION = ENV['VAULT_VERSION'] || "1.0.3"
+VAULT_VERSION = ENV['VAULT_VERSION'] || "1.1.0"
 
 ### Vagrant box definitions
 
