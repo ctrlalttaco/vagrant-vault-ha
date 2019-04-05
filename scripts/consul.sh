@@ -1,25 +1,24 @@
 #!/usr/bin/env bash
 
+export DEBIAN_FRONTEND="noninteractive"
 export PATH="$PATH:/usr/local/bin"
 
 CONSUL_VERSION="${CONSUL_VERSION:-1.4.3}"
-CONSUL_ENTERPRISE="${CONSUL_ENTERPRISE:-false}"
 CONSUL_TYPE="${CONSUL_TYPE:-server}"
 CONSUL_ACL="${CONSUL_ACL:-false}"
+ENTERPRISE="${ENTERPRISE:-false}"
 
 echo "Installing dependencies ..."
-yum -y makecache
-yum -y install unzip curl dnsmasq net-tools bind-utils
+apt-get -y install unzip curl
 
 echo "Installing Consul version ${CONSUL_VERSION}..."
-if [ $CONSUL_ENTERPRISE == "true" ]
+if [ $ENTERPRISE == "true" ]
 then
-    CONSUL_VERSION="${CONSUL_VERSION}+ent"
+  cp /vagrant/ent/consul-enterprise_*.zip ./consul.zip
+else
+  CONSUL_URL="https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip"
+  curl -s -o consul.zip "$CONSUL_URL"
 fi
-
-CONSUL_URL="https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip"
-
-curl -s -o consul.zip "$CONSUL_URL"
 
 unzip consul.zip
 chown root:root consul
@@ -61,7 +60,7 @@ data_dir                = "/var/lib/consul"
 log_file                = "/var/log/consul/consul.log"
 ui                      = true
 advertise_addr          = "${IP_ADDRESS}"
-retry_join              = ["172.20.0.11", "172.20.0.12", "172.20.0.13"]
+retry_join              = ["10.100.0.11", "10.100.0.12", "10.100.0.13"]
 encrypt                 = "3Zp3zLg7eQNA9p+asQhU8A=="
 encrypt_verify_incoming = true
 encrypt_verify_outgoing = true
@@ -143,13 +142,3 @@ EOF
 systemctl daemon-reload
 systemctl enable consul
 systemctl restart consul
-
-# Dnsmasq configuration
-DNS_IP=$(grep nameserver /etc/resolv.conf | awk '{ print $2 }')
-echo "server=$DNS_IP" | tee /etc/dnsmasq.d/00-default
-echo 'server=/consul/127.0.0.1#8600' | tee /etc/dnsmasq.d/10-consul
-sed -i '/^nameserver.*$/d' /etc/resolv.conf
-echo 'nameserver 127.0.0.1' | tee -a /etc/resolv.conf
-
-systemctl enable dnsmasq
-systemctl start dnsmasq

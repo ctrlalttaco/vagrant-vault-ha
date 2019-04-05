@@ -2,12 +2,17 @@
 
 export PATH=$PATH:/usr/local/bin
 
-VAULT_VERSION="${VAULT_VERSION:-1.0.3}"
+VAULT_VERSION="${VAULT_VERSION:-1.1.0}"
+ENTERPRISE="${ENTERPRISE:false}"
 
 echo "Installing Vault version ${VAULT_VERSION}..."
-VAULT_URL="https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip"
-
-curl -s -o vault.zip "$VAULT_URL"
+if [ $ENTERPRISE == "true" ]
+then
+  cp /vagrant/vault-enterprise_*.zip ./vault.zip
+else
+  VAULT_URL="https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip"
+  curl -s -o vault.zip "$VAULT_URL"
+fi
 
 unzip vault.zip
 chown root:root vault

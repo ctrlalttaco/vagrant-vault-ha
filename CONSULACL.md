@@ -52,18 +52,31 @@ Restart the Consul server service and repeat for each Consul server
 
 ## Vault Server Nodes
 
+Create an HCL file containing the ACL policy that will be used by Vault
+
+```
+node_prefix "" {
+    policy = "write"
+}
+
+service_prefix "" {
+    policy = "read"
+}
+```
+
 Create the Consul client agent policy
 
 ```
 $ consul acl policy create -name "vault-agent-policy" \
 -rules @agent.hcl \
 --token="ba551ccc-fa57-2d1c-edc7-ed1734405542"
+
 ID:           cb16d424-f4a5-c202-c6ac-a619e495e098
 Name:         vault-agent-policy
 Description:  
 Datacenters:  
 Rules:
-node_prefix "vault" {
+node_prefix "" {
     policy = "write"
 }
 
@@ -78,6 +91,7 @@ Create the Consul client agent token
 $ consul acl token create -description "Vault agent policy" \
 -policy-name "vault-agent-policy" \
 --token="ba551ccc-fa57-2d1c-edc7-ed1734405542"
+
 AccessorID:   67d7246c-e23f-c3ba-d005-b8f0ac4b3b6c
 SecretID:     ada782d5-a150-b2bb-d450-57e08cb91851
 Description:  Vault agent policy
@@ -105,7 +119,7 @@ Restart the Consul client service
 Create an HCL file containing the ACL policy that will be used by Vault
 
 ```
-node_prefix "vault" {
+node_prefix "" {
     policy = "write"
 }
 
@@ -113,7 +127,7 @@ service "vault" {
     policy = "write"
 }
 
-agent_prefix "vault" {
+agent_prefix "" {
     policy = "write"
 }
 
@@ -130,14 +144,15 @@ Create the Vault client token
 
 ```
 $ consul acl policy create -name "vault-client-policy" \
--rules @vault-client.hcl \
+-rules @client.hcl \
 --token="ba551ccc-fa57-2d1c-edc7-ed1734405542"
+
 ID:           71435aed-5432-3f25-c5d3-5b26621531c6
 Name:         vault-policy
 Description:  
 Datacenters:  
 Rules:
-node_prefix "vault" {
+node_prefix "" {
     policy = "write"
 }
 
@@ -145,7 +160,7 @@ service "vault" {
     policy = "write"
 }
 
-agent_prefix "vault" {
+agent_prefix "" {
     policy = "write"
 }
 
@@ -162,8 +177,9 @@ Create a client token using the created policy
 
 ```
 $ consul acl token create -description="Vault client token" \
--policy-name="vault-policy" \
+-policy-name="vault-client-policy" \
 --token="ba551ccc-fa57-2d1c-edc7-ed1734405542"
+
 AccessorID:   5391a750-933f-bc31-1a71-610476d9f9f3
 SecretID:     2f48b885-554d-f414-5857-0771c31935ec
 Description:  Vault client token
